@@ -1,6 +1,3 @@
-
-    
-        // Get elements
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 const chatWindow = document.getElementById("chat-window");
@@ -10,77 +7,66 @@ sendBtn.addEventListener("click", sendMessage);
 
 // Event listener for "Enter" key press
 userInput.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
+  if (event.key === "Enter") {
+    sendMessage();
+  }
 });
 
-// Function to append messages to chat window
+// Append messages
 function appendMessage(sender, message) {
-    const messageDiv = document.createElement("div");
-    messageDiv.classList.add("message", sender);
-    messageDiv.textContent = message;
-    chatWindow.appendChild(messageDiv);
-    chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to latest message
+  const messageDiv = document.createElement("div");
+  messageDiv.classList.add("message", sender);
+  messageDiv.textContent = message;
+  chatWindow.appendChild(messageDiv);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-// Function to show bot typing indicator
+// Show typing
 function showTypingIndicator() {
-    const typingDiv = document.createElement("div");
-    typingDiv.classList.add("message", "bot");
-    typingDiv.id = "typing-indicator";
-    typingDiv.textContent = "Bot is typing...";
-    chatWindow.appendChild(typingDiv);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
+  const typingDiv = document.createElement("div");
+  typingDiv.classList.add("message", "bot");
+  typingDiv.id = "typing-indicator";
+  typingDiv.textContent = "Bot is typing...";
+  chatWindow.appendChild(typingDiv);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-// Function to remove bot typing indicator
+// Remove typing
 function removeTypingIndicator() {
-    const typingDiv = document.getElementById("typing-indicator");
-    if (typingDiv) {
-        chatWindow.removeChild(typingDiv);
-    }
+  const typingDiv = document.getElementById("typing-indicator");
+  if (typingDiv) {
+    chatWindow.removeChild(typingDiv);
+  }
 }
 
-// Function to send message and fetch response from API
+// ✅ Send Message and Fetch Bot Reply using AffiliatePlus API
 async function sendMessage() {
-    const userMessage = userInput.value.trim();
-    
-    if (userMessage) {
-        // Append user's message to the chat window
-        appendMessage("user", userMessage);
-        userInput.value = ""; // Clear input field
+  const userMessage = userInput.value.trim();
 
-        // Show typing indicator
-        showTypingIndicator();
+  if (userMessage) {
+    appendMessage("user", userMessage);
+    userInput.value = "";
 
-        // Call the API
-        try {
-            const url = `https://api.paxsenix.biz.id/ai/gpt4omini?text=${encodeURIComponent(userMessage)}`;
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: { 'accept': 'application/json' }
-            });
+    showTypingIndicator();
 
-            // Remove typing indicator before showing bot response
-            removeTypingIndicator();
+    try {
+      const url = `https://api.affiliateplus.xyz/api/chatbot?message=${encodeURIComponent(
+        userMessage
+      )}&botname=ChatBot&ownername=Prasanthi&user=1`;
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+      const response = await fetch(url);
+      const data = await response.json();
 
-            const data = await response.json();
+      removeTypingIndicator();
 
-            if (data && data.ok && data.message) {
-                appendMessage("bot", data.message);  // Display the bot's response
-            } else {
-                appendMessage("bot", "Sorry, I couldn't find an answer.");
-            }
-        } catch (error) {
-            removeTypingIndicator();
-            appendMessage("bot", "Error: Unable to connect to the server.");
-        }
+      if (data && data.message) {
+        appendMessage("bot", data.message);
+      } else {
+        appendMessage("bot", "Sorry, I couldn't find an answer.");
+      }
+    } catch (error) {
+      removeTypingIndicator();
+      appendMessage("bot", "Error: Unable to connect to the server.");
     }
+  }
 }
-
-  
