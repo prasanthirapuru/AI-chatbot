@@ -2,17 +2,16 @@ const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 const chatWindow = document.getElementById("chat-window");
 
-// Event listener for send button
+// Send on click
 sendBtn.addEventListener("click", sendMessage);
 
-// Event listener for "Enter" key press
+// Send on Enter
 userInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
     sendMessage();
   }
 });
 
-// Append messages
 function appendMessage(sender, message) {
   const messageDiv = document.createElement("div");
   messageDiv.classList.add("message", sender);
@@ -21,7 +20,6 @@ function appendMessage(sender, message) {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-// Show typing
 function showTypingIndicator() {
   const typingDiv = document.createElement("div");
   typingDiv.classList.add("message", "bot");
@@ -31,7 +29,6 @@ function showTypingIndicator() {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-// Remove typing
 function removeTypingIndicator() {
   const typingDiv = document.getElementById("typing-indicator");
   if (typingDiv) {
@@ -39,14 +36,12 @@ function removeTypingIndicator() {
   }
 }
 
-// ✅ Send Message and Fetch Bot Reply using AffiliatePlus API
 async function sendMessage() {
   const userMessage = userInput.value.trim();
 
   if (userMessage) {
     appendMessage("user", userMessage);
     userInput.value = "";
-
     showTypingIndicator();
 
     try {
