@@ -3,7 +3,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: url('background_img.jpg') no-repeat center center fixed;
+            background: url('bgimage.jpg') no-repeat center center fixed;
             background-size: cover;
             display: flex;
             justify-content: center;
@@ -177,3 +177,4 @@
         }
 
     
+
